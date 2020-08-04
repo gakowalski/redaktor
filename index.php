@@ -4,23 +4,14 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-if (($_GET['pass'] ?? '') !='gk') return '';
+if (($_GET['pass'] ?? '') !='gk') die('Not authorized');
 
-$path = $_REQUEST['path'] ?? '.';
+$path = realpath($_REQUEST['path'] ?? '.');
+$path_limit = '/var/www/html';
+if (strpos($path, $path_limit) === false) die('Not authorized');
+
 if (is_dir($path) == false && isset($_POST['content'])) {
   file_put_contents($path, html_entity_decode($_POST['content']));
-}
-
-// https://stackoverflow.com/a/21073572/925196
-
-function scandir_r($dir = '.') {
-/*    $scan = array_diff(scandir($dir), array('.', '..');
-    $tree = array();
-    $queue = array();
-    foreach ( $scan as $item ) 
-        if ( is_file($item) ) $queue[] = $item;
-        else $tree[] = scanRecursively($dir . '/' . $item);
-    return array_merge($tree, $queue);*/
 }
 ?>
 <!DOCTYPE html>
@@ -29,6 +20,7 @@ function scandir_r($dir = '.') {
 <title>Redaktor</title>
 </head>
 <body>
+<h2><?= $path ?></h2>
 <?php
   if (is_dir($path)):
     $files = array_diff(scandir($path), ['.']); ?>
@@ -44,9 +36,9 @@ function scandir_r($dir = '.') {
 <?php else: ?>
 <form method="POST">
 <input type="hidden" name="path" value="<?= $path ?>">
-<div id="editor" style="height: 90vh;"></div>
+<div id="editor" style="height: 80vh;"></div>
 <textarea id="content" name="content" style="display: none"><?= htmlentities(file_get_contents($path)); ?></textarea>
-<input type="submit">
+<br><input type="submit" style="padding: 1rem; background-color: lightgreen">
 </form>
 <script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="ace-builds/src-noconflict/ext-modelist.js" type="text/javascript" charset="utf-8"></script>
