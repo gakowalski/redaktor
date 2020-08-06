@@ -38,6 +38,7 @@ if (is_dir($path) == false && isset($_POST['content'])) {
 <?php
   if (is_dir($path)):
     $files = array_diff(scandir($path), ['.']); ?>
+    <p>Info: CTRL+SHIFT+File opens file/folder in new tab</p>
     <table border="0" cellspacing="0" cellpadding="5">
     <?php $count = 0; foreach ($files as $file): ?>
     <tr <?= $count++ % 2 ? 'bgcolor="lightgray"' : '' ?> >
@@ -48,6 +49,7 @@ if (is_dir($path) == false && isset($_POST['content'])) {
    <?php endforeach; ?>
     </table>
 <?php else: ?>
+<p><?= pathinfo($path, PATHINFO_EXTENSION) == 'php' ? `php -l $path` : '' ?></p>
 <form method="POST">
 <input type="hidden" name="path" value="<?= $path ?>">
 <div id="editor" style="height: 80vh;"></div>
