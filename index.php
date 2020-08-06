@@ -17,10 +17,15 @@ if (is_dir($path) == false && isset($_POST['content'])) {
 <!DOCTYPE html>
 <html>
 <head>
-<title>Redaktor</title>
+<title><?= basename($path) ?></title>
 </head>
 <body>
-<h2><?= $path ?></h2>
+<h2>
+  <?php $path_accumulator = ''; foreach(explode(DIRECTORY_SEPARATOR, $path) as $index => $path_part): ?>
+  <?php if ($index == 0) continue; ?>
+  /<a href="?pass=<?= $_GET['pass'] . '&path=' . ($path_accumulator .= DIRECTORY_SEPARATOR . $path_part) ?>"><?= $path_part ?></a>
+  <?php endforeach; ?>
+</h2>
 <?php
   if (is_dir($path)):
     $files = array_diff(scandir($path), ['.']); ?>
