@@ -6,7 +6,7 @@
 $security_password_hash = '05fa2a6a4734b5efb4d7c4f33077fc1d2f1b9eff486b24a4e4e5953de50dfe89';
 
 // basic security, all paths MUST contain this
-$path_limit = '/var/www/html';
+$path_limit = 'www';
 
 /* end of config */
 
@@ -32,23 +32,27 @@ if (is_dir($path) == false && isset($_POST['content'])) {
 <h2>
   <?php $path_accumulator = ''; foreach(explode(DIRECTORY_SEPARATOR, $path) as $index => $path_part): ?>
   <?php if ($index == 0) continue; ?>
-  /<a href="?pass=<?= $_GET['pass'] . '&path=' . ($path_accumulator .= DIRECTORY_SEPARATOR . $path_part) ?>"><?= $path_part ?></a>
+  <?= DIRECTORY_SEPARATOR ?><a href="?pass=<?= $_GET['pass'] . '&path=' . ($path_accumulator .= DIRECTORY_SEPARATOR . $path_part) ?>"><?= $path_part ?></a>
   <?php endforeach; ?>
 </h2>
-<?php
+
+<?php // DIRECTORY BROWSER
   if (is_dir($path)):
     $files = array_diff(scandir($path), ['.']); ?>
     <p>Info: CTRL+SHIFT+File opens file/folder in new tab</p>
     <table border="0" cellspacing="0" cellpadding="5">
     <?php $count = 0; foreach ($files as $file): ?>
     <tr <?= $count++ % 2 ? 'bgcolor="lightgray"' : '' ?> >
-<td><?= is_dir($path . '/' . $file) ? '📁' : '📄' ?></td>
-<td><a href="?path=<?= $path.'/'.$file ?>&pass=<?= $_GET['pass'] ?>"><?= $file ?></a></td>
-<td><?= is_writable($path .'/'.$file) ? '✍ writable' : '🔒 not writable' ?></td>
+<td><?= is_dir($path . DIRECTORY_SEPARATOR . $file) ? '📁' : '📄' ?></td>
+<td><a href="?path=<?= $path.DIRECTORY_SEPARATOR.$file ?>&pass=<?= $_GET['pass'] ?>"><?= $file ?></a></td>
+<td><?= is_writable($path .DIRECTORY_SEPARATOR.$file) ? '✍ writable' : '🔒 not writable' ?></td>
 </tr>
    <?php endforeach; ?>
     </table>
-<?php else: ?>
+<hr>
+
+<?php else: // FILE EDITOR ?>
+
 <p><?= pathinfo($path, PATHINFO_EXTENSION) == 'php' ? `php -l $path` : '' ?></p>
 <form method="POST">
 <input type="hidden" name="path" value="<?= $path ?>">
@@ -76,5 +80,6 @@ editor.getSession().on('change', function(){
 });
 </script>
 <?php endif; ?>
+
 </body>
 </html>
