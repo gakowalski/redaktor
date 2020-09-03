@@ -3,7 +3,7 @@ Very basic, self-hosted IDE to quickly edit code on dev environments while no be
 
 ## Installation & Usage
 
-1. Copy anywhere on the webserver.
+1. Copy anywhere on the webserver and download submodules: `git submodule init`.
 2. Edit index.php and change `$security_password_hash` value to SHA256 hash of password you want to use.
 3. Edit index.php and change `$path_limit` so you won't go outside of your dev folder.
 3. You're ready: open index.php in web browser with `pass` parameter equal to your password.
