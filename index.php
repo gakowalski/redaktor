@@ -49,30 +49,11 @@ if (is_dir($path) == false && isset($_POST['content'])) {
 <p><?= pathinfo($path, PATHINFO_EXTENSION) == 'php' ? `php -l $path` : '' ?></p>
 <form method="POST">
 <input type="hidden" name="path" value="<?= $path ?>">
-<div id="editor" style="height: 80vh;"></div>
+<input id="submit" type="submit" style="padding: 1rem; background-color: lightgreen">
+<div id="editor"></div>
 <textarea id="content" name="content" style="display: none"><?= htmlentities(file_get_contents($path)); ?></textarea>
-<br><input type="submit" style="padding: 1rem; background-color: lightgreen">
 </form>
-<script src="ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="ace-builds/src-noconflict/ext-modelist.js" type="text/javascript" charset="utf-8"></script>
-<script src="ace-builds/src-noconflict/theme-terminal.js" type="text/javascript" charset="utf-8"></script>
-<script>
-document.getElementById('editor').textContent = document.getElementById('content').textContent;
-var modelist = ace.require("ace/ext/modelist");
-var editor = ace.edit("editor");
-editor.setOptions({
-    autoScrollEditorIntoView: true,
-    copyWithEmptySelection: true,
-    highlightActiveLine: true,
-    theme: 'ace/theme/terminal',
-});
-var mode = modelist.getModeForPath('<?= $path ?>').mode;
-editor.session.setMode(mode);
-editor.resize();
-editor.getSession().on('change', function(){
-  document.getElementById('content').textContent = editor.getSession().getValue();
-});
-</script>
+<script src="js/editor.bundle.js" type="text/javascript" charset="utf-8"></script>
 <?php endif; ?>
 
 </body>
