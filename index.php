@@ -1,14 +1,7 @@
 <?php
 
-/* config section */
-
-// basic security, sha2565 hash of password to be used as 'pass' parameter
-$security_password_hash = '05fa2a6a4734b5efb4d7c4f33077fc1d2f1b9eff486b24a4e4e5953de50dfe89';
-
-// basic security, all paths MUST contain this
-$path_limit = 'www';
-
-/* end of config */
+require 'config.php';
+extract($config);
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
