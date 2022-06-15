@@ -16,3 +16,13 @@ Now you'll see simple directory listing. Click on folders or on breadcrumbs-head
 * [ACE code editor](https://ace.c9.io/) (syntax highlighting, indent/outdent, highlight matching parentheses, live syntax checker for some languages etc.)
 * Automatic PHP syntax check.
 * Directory listing with writable/non-writable info about files.
+
+## Development
+
+Updating submodules:
+
+```
+git submodule update --remote
+```
+
+And then commit changes to the repo.

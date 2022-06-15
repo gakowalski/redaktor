@@ -63,6 +63,7 @@ var editor = ace.edit("editor");
 editor.setOptions({
     autoScrollEditorIntoView: true,
     copyWithEmptySelection: true,
+    highlightActiveLine: true,
     theme: 'ace/theme/terminal',
 });
 var mode = modelist.getModeForPath('<?= $path ?>').mode;
